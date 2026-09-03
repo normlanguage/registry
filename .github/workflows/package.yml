@@ -1,0 +1,85 @@
+name: Package Module
+
+on:
+  workflow_call:
+    inputs:
+      norm-version:
+        description: Norm toolchain version
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          lfs: true
+      - name: Install Norm
+        env:
+          NORM_VERSION: ${{ inputs.norm-version }}
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/norm"
+          archive="norm-v$NORM_VERSION-linux-x64.tar.gz"
+          base="https://github.com/normlanguage/Norm/releases/download/v$NORM_VERSION"
+          curl -fL "$base/$archive" -o "$RUNNER_TEMP/$archive"
+          curl -fL "$base/SHA256SUMS" -o "$RUNNER_TEMP/SHA256SUMS"
+          grep "  $archive$" "$RUNNER_TEMP/SHA256SUMS" | (cd "$RUNNER_TEMP" && sha256sum -c -)
+          tar -C "$RUNNER_TEMP/norm" -xzf "$RUNNER_TEMP/$archive"
+          echo "$RUNNER_TEMP/norm" >> "$GITHUB_PATH"
+      - name: Locate Module
+        id: module
+        shell: bash
+        run: |
+          mapfile -d '' modules < <(find . -type f -name module.norm -not -path './.git/*' -not -path './sample/*' -print0)
+          [[ "${#modules[@]}" == 1 ]]
+          echo "path=${modules[0]}" >> "$GITHUB_OUTPUT"
+      - name: Resolve and package
+        shell: bash
+        run: |
+          norm resolve "${{ steps.module.outputs.path }}"
+          git diff --exit-code -- "${{ steps.module.outputs.path }}"
+          norm package "${{ steps.module.outputs.path }}" --output build/repository
+      - name: Verify examples
+        shell: bash
+        run: |
+          while IFS= read -r -d '' entry; do
+            timeout 300 norm "$entry"
+          done < <(find . -type f -name Main.norm -not -path './.git/*' -not -path './build/*' -print0)
+      - name: Select release artifact
+        id: artifact
+        shell: bash
+        run: |
+          mapfile -t archives < <(find build/repository -type f -name '*.nar')
+          [[ "${#archives[@]}" == 1 ]]
+          archive="${archives[0]}"
+          version="${archive%.nar}"
+          version="${version##*-}"
+          echo "archive=$archive" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - uses: actions/attest-build-provenance@v3
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          subject-path: ${{ steps.artifact.outputs.archive }}
+      - name: Publish immutable release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARCHIVE: ${{ steps.artifact.outputs.archive }}
+          VERSION: ${{ steps.artifact.outputs.version }}
+        shell: bash
+        run: |
+          [[ "$GITHUB_REF_NAME" == "v$VERSION" ]]
+          state="$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft 2>/dev/null || echo missing)"
+          [[ "$state" != "false" ]]
+          if [[ "$state" == "missing" ]]; then
+            gh release create "$GITHUB_REF_NAME" --verify-tag --draft --title "$GITHUB_REF_NAME" --generate-notes
+          fi
+          gh release upload "$GITHUB_REF_NAME" "$ARCHIVE" "$ARCHIVE.sha256" --clobber
+          gh release edit "$GITHUB_REF_NAME" --draft=false --latest=false
