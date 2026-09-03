@@ -1,0 +1,245 @@
+{
+  "formatVersion": 1,
+  "packages": [
+    {
+      "name": "caffeine.cache",
+      "owner": "normlanguage",
+      "repository": "caffeine-cache"
+    },
+    {
+      "name": "commons.io",
+      "owner": "normlanguage",
+      "repository": "commons-io"
+    },
+    {
+      "name": "commons.lang",
+      "owner": "normlanguage",
+      "repository": "commons-lang"
+    },
+    {
+      "name": "eclipse.collections",
+      "owner": "normlanguage",
+      "repository": "eclipse-collections"
+    },
+    {
+      "name": "fastutil.collections",
+      "owner": "normlanguage",
+      "repository": "fastutil-collections"
+    },
+    {
+      "name": "guava.core",
+      "owner": "normlanguage",
+      "repository": "guava-core"
+    },
+    {
+      "name": "h2.database",
+      "owner": "normlanguage",
+      "repository": "h2-database"
+    },
+    {
+      "name": "jakarta.annotation",
+      "owner": "normlanguage",
+      "repository": "jakarta-annotation"
+    },
+    {
+      "name": "jakarta.inject",
+      "owner": "normlanguage",
+      "repository": "jakarta-inject"
+    },
+    {
+      "name": "jakarta.validation",
+      "owner": "normlanguage",
+      "repository": "jakarta-validation"
+    },
+    {
+      "name": "joda.time",
+      "owner": "normlanguage",
+      "repository": "joda-time"
+    },
+    {
+      "name": "jsoup.jsoup",
+      "owner": "normlanguage",
+      "repository": "jsoup-jsoup"
+    },
+    {
+      "name": "junit.jupiter",
+      "owner": "normlanguage",
+      "repository": "junit-jupiter"
+    },
+    {
+      "name": "micronaut.aop",
+      "owner": "normlanguage",
+      "repository": "micronaut-aop"
+    },
+    {
+      "name": "micronaut.core",
+      "owner": "normlanguage",
+      "repository": "micronaut-core"
+    },
+    {
+      "name": "micronaut.data.jdbc",
+      "owner": "normlanguage",
+      "repository": "micronaut-data-jdbc"
+    },
+    {
+      "name": "micronaut.data.model",
+      "owner": "normlanguage",
+      "repository": "micronaut-data-model"
+    },
+    {
+      "name": "micronaut.data.processor",
+      "owner": "normlanguage",
+      "repository": "micronaut-data-processor"
+    },
+    {
+      "name": "micronaut.data.tx",
+      "owner": "normlanguage",
+      "repository": "micronaut-data-tx"
+    },
+    {
+      "name": "micronaut.http",
+      "owner": "normlanguage",
+      "repository": "micronaut-http"
+    },
+    {
+      "name": "micronaut.http.client",
+      "owner": "normlanguage",
+      "repository": "micronaut-http-client"
+    },
+    {
+      "name": "micronaut.http.client.netty",
+      "owner": "normlanguage",
+      "repository": "micronaut-http-client-netty"
+    },
+    {
+      "name": "micronaut.inject",
+      "owner": "normlanguage",
+      "repository": "micronaut-inject"
+    },
+    {
+      "name": "micronaut.inject.processor",
+      "owner": "normlanguage",
+      "repository": "micronaut-inject-processor"
+    },
+    {
+      "name": "micronaut.jackson",
+      "owner": "normlanguage",
+      "repository": "micronaut-jackson"
+    },
+    {
+      "name": "micronaut.jdbc.hikari",
+      "owner": "normlanguage",
+      "repository": "micronaut-jdbc-hikari"
+    },
+    {
+      "name": "micronaut.json",
+      "owner": "normlanguage",
+      "repository": "micronaut-json"
+    },
+    {
+      "name": "micronaut.management",
+      "owner": "normlanguage",
+      "repository": "micronaut-management"
+    },
+    {
+      "name": "micronaut.runtime",
+      "owner": "normlanguage",
+      "repository": "micronaut-runtime"
+    },
+    {
+      "name": "micronaut.security",
+      "owner": "normlanguage",
+      "repository": "micronaut-security"
+    },
+    {
+      "name": "micronaut.serde.api",
+      "owner": "normlanguage",
+      "repository": "micronaut-serde-api"
+    },
+    {
+      "name": "micronaut.serde.jackson",
+      "owner": "normlanguage",
+      "repository": "micronaut-serde-jackson"
+    },
+    {
+      "name": "micronaut.serde.processor",
+      "owner": "normlanguage",
+      "repository": "micronaut-serde-processor"
+    },
+    {
+      "name": "micronaut.server.netty",
+      "owner": "normlanguage",
+      "repository": "micronaut-server-netty"
+    },
+    {
+      "name": "micronaut.test",
+      "owner": "normlanguage",
+      "repository": "micronaut-test"
+    },
+    {
+      "name": "micronaut.test.core",
+      "owner": "normlanguage",
+      "repository": "micronaut-test-core"
+    },
+    {
+      "name": "micronaut.test.junit5",
+      "owner": "normlanguage",
+      "repository": "micronaut-test-junit5"
+    },
+    {
+      "name": "micronaut.validation",
+      "owner": "normlanguage",
+      "repository": "micronaut-validation"
+    },
+    {
+      "name": "micronaut.validation.processor",
+      "owner": "normlanguage",
+      "repository": "micronaut-validation-processor"
+    },
+    {
+      "name": "micronaut.web",
+      "owner": "normlanguage",
+      "repository": "micronaut-web"
+    },
+    {
+      "name": "micronaut.websocket",
+      "owner": "normlanguage",
+      "repository": "micronaut-websocket"
+    },
+    {
+      "name": "okhttp.client",
+      "owner": "normlanguage",
+      "repository": "okhttp-client"
+    },
+    {
+      "name": "org.json",
+      "owner": "normlanguage",
+      "repository": "org-json"
+    },
+    {
+      "name": "orm",
+      "owner": "normlanguage",
+      "repository": "orm"
+    },
+    {
+      "name": "orm.hibernate",
+      "owner": "normlanguage",
+      "repository": "orm-hibernate"
+    },
+    {
+      "name": "orm.micronaut",
+      "owner": "normlanguage",
+      "repository": "orm-micronaut"
+    },
+    {
+      "name": "orm.micronaut.tx",
+      "owner": "normlanguage",
+      "repository": "orm-micronaut-tx"
+    },
+    {
+      "name": "reactor.core",
+      "owner": "normlanguage",
+      "repository": "reactor-core"
+    }
+  ]
+}

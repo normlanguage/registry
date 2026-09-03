@@ -1,0 +1,33 @@
+name: Validate registry
+
+on:
+  pull_request:
+    paths:
+      - registry.json
+      - registry.schema.json
+      - .github/workflows/validate.yml
+  push:
+    branches: [main]
+    paths:
+      - registry.json
+      - registry.schema.json
+      - .github/workflows/validate.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: python-jsonschema/check-jsonschema@0.38.0
+        with:
+          schemafile: registry.schema.json
+          files: registry.json
+      - name: Validate unique sorted names
+        run: |
+          jq -e '
+            [.packages[].name] == ([.packages[].name] | sort)
+            and (([.packages[].name] | unique | length) == (.packages | length))
+          ' registry.json
