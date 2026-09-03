@@ -39,12 +39,11 @@ jobs:
           mapfile -d '' modules < <(find . -type f -name module.norm -not -path './.git/*' -not -path './sample/*' -print0)
           [[ "${#modules[@]}" == 1 ]]
           echo "path=${modules[0]}" >> "$GITHUB_OUTPUT"
-      - name: Resolve and package
+      - name: Package
         shell: bash
         run: |
-          norm resolve "${{ steps.module.outputs.path }}"
-          git diff --exit-code -- "${{ steps.module.outputs.path }}"
           norm package "${{ steps.module.outputs.path }}" --output build/repository
+          git diff --exit-code -- "${{ steps.module.outputs.path }}"
       - name: Verify examples
         shell: bash
         run: |
