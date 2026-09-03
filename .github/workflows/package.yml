@@ -25,14 +25,13 @@ jobs:
           NORM_VERSION: ${{ inputs.norm-version }}
         shell: bash
         run: |
-          mkdir -p "$RUNNER_TEMP/norm"
           archive="norm-v$NORM_VERSION-linux-x64.tar.gz"
           base="https://github.com/normlanguage/Norm/releases/download/v$NORM_VERSION"
           curl -fL "$base/$archive" -o "$RUNNER_TEMP/$archive"
           curl -fL "$base/SHA256SUMS" -o "$RUNNER_TEMP/SHA256SUMS"
           grep "  $archive$" "$RUNNER_TEMP/SHA256SUMS" | (cd "$RUNNER_TEMP" && sha256sum -c -)
-          tar -C "$RUNNER_TEMP/norm" -xzf "$RUNNER_TEMP/$archive"
-          echo "$RUNNER_TEMP/norm" >> "$GITHUB_PATH"
+          tar -C "$RUNNER_TEMP" -xzf "$RUNNER_TEMP/$archive"
+          echo "$RUNNER_TEMP/norm/bin" >> "$GITHUB_PATH"
       - name: Locate Module
         id: module
         shell: bash
