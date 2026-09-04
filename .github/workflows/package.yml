@@ -44,6 +44,8 @@ jobs:
         run: |
           norm package "${{ steps.module.outputs.path }}" --output build/repository
           git diff --exit-code -- "${{ steps.module.outputs.path }}"
+          mkdir -p "$HOME/.norm/cache/packages"
+          cp -R build/repository/. "$HOME/.norm/cache/packages/"
       - name: Verify examples
         shell: bash
         run: |
