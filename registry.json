@@ -62,6 +62,16 @@
       "repository": "jsoup-jsoup"
     },
     {
+      "name": "jstachio.annotation",
+      "owner": "normlanguage",
+      "repository": "jstachio-annotation"
+    },
+    {
+      "name": "jstachio.processor",
+      "owner": "normlanguage",
+      "repository": "jstachio-processor"
+    },
+    {
       "name": "junit.jupiter",
       "owner": "normlanguage",
       "repository": "junit-jupiter"
@@ -195,6 +205,11 @@
       "name": "micronaut.validation.processor",
       "owner": "normlanguage",
       "repository": "micronaut-validation-processor"
+    },
+    {
+      "name": "micronaut.views.jstachio",
+      "owner": "normlanguage",
+      "repository": "micronaut-views-jstachio"
     },
     {
       "name": "micronaut.web",
