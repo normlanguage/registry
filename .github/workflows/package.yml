@@ -65,7 +65,7 @@ jobs:
         run: |
           module_dir="$(dirname "${{ steps.module.outputs.path }}")"
           if [[ -d "$module_dir/tests" ]]; then
-            timeout 300 norm test "${{ steps.module.outputs.path }}"
+            timeout 300 norm test "$module_dir"
           fi
       - name: Verify examples
         shell: bash
