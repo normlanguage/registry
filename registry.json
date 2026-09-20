@@ -17,6 +17,11 @@
       "repository": "commons-lang"
     },
     {
+      "name": "di",
+      "owner": "normlanguage",
+      "repository": "di"
+    },
+    {
       "name": "eclipse.collections",
       "owner": "normlanguage",
       "repository": "eclipse-collections"
@@ -25,6 +30,21 @@
       "name": "fastutil.collections",
       "owner": "normlanguage",
       "repository": "fastutil-collections"
+    },
+    {
+      "name": "fx.base",
+      "owner": "normlanguage",
+      "repository": "fx-base"
+    },
+    {
+      "name": "fx.controls",
+      "owner": "normlanguage",
+      "repository": "fx-controls"
+    },
+    {
+      "name": "fx.graphics",
+      "owner": "normlanguage",
+      "repository": "fx-graphics"
     },
     {
       "name": "guava.core",
@@ -255,6 +275,16 @@
       "name": "reactor.core",
       "owner": "normlanguage",
       "repository": "reactor-core"
+    },
+    {
+      "name": "ui",
+      "owner": "normlanguage",
+      "repository": "ui"
+    },
+    {
+      "name": "ui.fx",
+      "owner": "normlanguage",
+      "repository": "ui-fx"
     }
   ]
 }
