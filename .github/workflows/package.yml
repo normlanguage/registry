@@ -50,7 +50,7 @@ jobs:
         id: module
         shell: bash
         run: |
-          mapfile -d '' modules < <(find . -type f -name module.norm -not -path './.git/*' -not -path './examples/*' -not -path './sample/*' -print0)
+          mapfile -d '' modules < <(find . -type f -name module.norm -not -path './.git/*' -not -path './examples/*' -not -path './sample/*' -not -path './samples/*' -print0)
           [[ "${#modules[@]}" == 1 ]]
           echo "path=${modules[0]}" >> "$GITHUB_OUTPUT"
       - name: Package
@@ -72,7 +72,7 @@ jobs:
         run: |
           while IFS= read -r -d '' entry; do
             timeout 300 norm "$entry"
-          done < <(find . -type f -name Main.norm -not -path './.git/*' -not -path './build/*' -print0)
+          done < <(find . -type f -name Main.norm -not -path './.git/*' -not -path './build/*' -not -path './samples/*' -print0)
       - name: Select release artifact
         id: artifact
         shell: bash
