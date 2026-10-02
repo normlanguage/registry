@@ -310,6 +310,16 @@
       "name": "ui.fx",
       "owner": "normlanguage",
       "repository": "ui-fx"
+    },
+    {
+      "name": "ui.kit",
+      "owner": "normlanguage",
+      "repository": "ui-component"
+    },
+    {
+      "name": "ui.kit.fx",
+      "owner": "normlanguage",
+      "repository": "ui-component"
     }
   ]
 }
