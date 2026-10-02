@@ -72,6 +72,11 @@
       "repository": "jakarta-validation"
     },
     {
+      "name": "jdk.base",
+      "owner": "normlanguage",
+      "repository": "jdk-base"
+    },
+    {
       "name": "joda.time",
       "owner": "normlanguage",
       "repository": "joda-time"
@@ -282,9 +287,24 @@
       "repository": "reactor-core"
     },
     {
+      "name": "theme",
+      "owner": "normlanguage",
+      "repository": "theme"
+    },
+    {
       "name": "ui",
       "owner": "normlanguage",
       "repository": "ui"
+    },
+    {
+      "name": "ui.component",
+      "owner": "normlanguage",
+      "repository": "ui-component"
+    },
+    {
+      "name": "ui.component.fx",
+      "owner": "normlanguage",
+      "repository": "ui-component"
     },
     {
       "name": "ui.fx",
