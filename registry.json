@@ -320,6 +320,11 @@
       "name": "ui.kit.fx",
       "owner": "normlanguage",
       "repository": "ui-component"
+    },
+    {
+      "name": "windows",
+      "owner": "normlanguage",
+      "repository": "windows"
     }
   ]
 }
