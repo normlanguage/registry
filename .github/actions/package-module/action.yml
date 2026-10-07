@@ -35,7 +35,7 @@ runs:
         $ErrorActionPreference = 'Stop'
         $root = (Get-Location).Path
         $module = [IO.Path]::GetFullPath((Join-Path $root $env:MODULE_PATH))
-        if (!$module.StartsWith($root + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Module is outside repository' }
+        if ($module -ne $root -and !$module.StartsWith($root + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Module is outside repository' }
         if (!(Test-Path -LiteralPath (Join-Path $module 'module.norm'))) { throw 'Module descriptor is missing' }
         $license = Join-Path $root 'LICENSE'
         New-Item -ItemType Directory -Force (Join-Path $module 'resources') | Out-Null
