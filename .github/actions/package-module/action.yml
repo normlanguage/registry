@@ -26,6 +26,7 @@ runs:
     - id: package
       shell: pwsh
       env:
+        MODULE_REPOSITORY: ${{ github.repository }}
         MODULE_PATH: ${{ inputs.module-path }}
         PACKAGE_NORM: ${{ inputs.norm-executable }}
         OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
@@ -38,8 +39,10 @@ runs:
         if ($module -ne $root -and !$module.StartsWith($root + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Module is outside repository' }
         if (!(Test-Path -LiteralPath (Join-Path $module 'module.norm'))) { throw 'Module descriptor is missing' }
         $license = Join-Path $root 'LICENSE'
-        New-Item -ItemType Directory -Force (Join-Path $module 'resources') | Out-Null
-        Copy-Item -LiteralPath $license -Destination (Join-Path $module 'resources/LICENSE')
+        $moduleName = ($env:MODULE_REPOSITORY -split '/')[-1]
+        $resource = Join-Path $module ("resources/META-INF/licenses/$moduleName")
+        New-Item -ItemType Directory -Force $resource | Out-Null
+        Copy-Item -LiteralPath $license -Destination (Join-Path $resource 'LICENSE')
         & $env:PACKAGE_NORM package $module --output $env:OUTPUT_DIRECTORY
         if ($LASTEXITCODE -ne 0) { throw 'Module packaging failed' }
         git diff --exit-code -- '*.norm'
@@ -47,6 +50,7 @@ runs:
         $archives = @(Get-ChildItem -LiteralPath $env:OUTPUT_DIRECTORY -Recurse -Filter '*.nar')
         if ($archives.Count -ne 1) { throw 'Output must contain exactly one NAR' }
         $artifact = & (Join-Path $env:ACTION_DIRECTORY 'verify-artifact.ps1') -Archive $archives[0].FullName -License $license
+        if ($artifact.name -cne $moduleName) { throw 'Repository name must equal module name' }
         "archive=$($artifact.archive)" >> $env:GITHUB_OUTPUT
         "version=$($artifact.version)" >> $env:GITHUB_OUTPUT
         if ($env:CACHE_DIRECTORY) {

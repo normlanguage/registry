@@ -7,7 +7,7 @@ try {
     Set-Content $license 'test-license' -NoNewline
     $archive = Join-Path $temporary 'demo-3.nar'
     $zip = [IO.Compression.ZipFile]::Open($archive, 'Create')
-    foreach ($entry in @{'module.json'='{"module":{"name":"demo","version":3}}'; 'resources/LICENSE'='test-license'}.GetEnumerator()) {
+    foreach ($entry in @{'module.json'='{"module":{"name":"demo","version":3}}'; 'resources/META-INF/licenses/demo/LICENSE'='test-license'}.GetEnumerator()) {
         $writer = [IO.StreamWriter]::new($zip.CreateEntry($entry.Key).Open())
         $writer.Write($entry.Value)
         $writer.Dispose()
