@@ -13,3 +13,5 @@
 具有 Windows Java 依赖图的模块在调用共享工作流时设置 `runner: windows-2025`。默认运行器为 Linux。
 
 工具链安装入口见 [setup-norm](.github/actions/setup-norm/action.yml)。公共打包工作流要求在 `norm-version` 与完整提交 SHA `norm-source-ref` 中选一个；源码模式调用编译器已有的发行目录构建任务。
+
+仓库和包规范统一见 [package-standards](https://github.com/normlanguage/package-standards)。有原生产物的库先构建并验证固定依赖，再调用 [package-module](.github/actions/package-module/action.yml)，消费方测试通过后调用 [publish-module](.github/actions/publish-module/action.yml)。归档元数据是发布身份的唯一来源；打包同时验证摘要与根 LICENSE 的一致性。模块中的 `resources/META-INF/licenses/<module.name>/LICENSE` 为生成副本，应加入忽略规则，根文件是唯一维护入口。
