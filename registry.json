@@ -32,21 +32,6 @@
       "repository": "fastutil-collections"
     },
     {
-      "name": "fx.base",
-      "owner": "normlanguage",
-      "repository": "fx-base"
-    },
-    {
-      "name": "fx.controls",
-      "owner": "normlanguage",
-      "repository": "fx-controls"
-    },
-    {
-      "name": "fx.graphics",
-      "owner": "normlanguage",
-      "repository": "fx-graphics"
-    },
-    {
       "name": "guava.core",
       "owner": "normlanguage",
       "repository": "guava-core"
@@ -70,6 +55,11 @@
       "name": "jakarta.validation",
       "owner": "normlanguage",
       "repository": "jakarta-validation"
+    },
+    {
+      "name": "javafx",
+      "owner": "normlanguage",
+      "repository": "javafx"
     },
     {
       "name": "jdk.base",
@@ -287,39 +277,29 @@
       "repository": "reactor-core"
     },
     {
-      "name": "theme",
-      "owner": "normlanguage",
-      "repository": "theme"
-    },
-    {
       "name": "ui",
       "owner": "normlanguage",
       "repository": "ui"
     },
     {
-      "name": "ui.component",
-      "owner": "normlanguage",
-      "repository": "ui-component"
-    },
-    {
-      "name": "ui.component.fx",
-      "owner": "normlanguage",
-      "repository": "ui-component"
-    },
-    {
       "name": "ui.fx",
       "owner": "normlanguage",
-      "repository": "ui-fx"
+      "repository": "ui.fx"
     },
     {
-      "name": "ui.kit",
+      "name": "ui.fx.kit",
       "owner": "normlanguage",
-      "repository": "ui-component"
+      "repository": "ui.fx.kit"
     },
     {
-      "name": "ui.kit.fx",
+      "name": "ui.theme",
       "owner": "normlanguage",
-      "repository": "ui-component"
+      "repository": "ui.theme"
+    },
+    {
+      "name": "ui.web",
+      "owner": "normlanguage",
+      "repository": "ui.web"
     },
     {
       "name": "windows",
