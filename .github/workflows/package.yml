@@ -42,7 +42,7 @@ jobs:
           echo "path=${modules[0]}" >> "$GITHUB_OUTPUT"
           echo "directory=$(dirname "${modules[0]}")" >> "$GITHUB_OUTPUT"
       - id: artifact
-        uses: normlanguage/registry/.github/actions/package-module@b11598bb9fe34b87f9cee64c674c2bcf317cb04b
+        uses: normlanguage/registry/.github/actions/package-module@89c0d966a181d3ba4e6dde4be377708a7f1df566
         with:
           module-path: ${{ steps.module.outputs.directory }}
       - name: Install candidate
@@ -64,7 +64,7 @@ jobs:
           while IFS= read -r -d '' entry; do
             timeout 300 norm "$entry"
           done < <(find . -type f -name Main.norm -not -path './.git/*' -not -path './.tmp/*' -not -path './.norm/*' -not -path './build/*' -not -path './samples/*' -print0)
-      - uses: normlanguage/registry/.github/actions/publish-module@b11598bb9fe34b87f9cee64c674c2bcf317cb04b
+      - uses: normlanguage/registry/.github/actions/publish-module@89c0d966a181d3ba4e6dde4be377708a7f1df566
         with:
           archive: ${{ steps.artifact.outputs.archive }}
           version: ${{ steps.artifact.outputs.version }}
