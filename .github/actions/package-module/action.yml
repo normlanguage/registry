@@ -1,0 +1,55 @@
+name: Package Norm module
+description: Package a pinned module with its repository license and verify its archive
+inputs:
+  module-path:
+    description: Module directory relative to the repository root
+    required: true
+  norm-executable:
+    description: Norm executable or repository wrapper
+    default: norm
+  output-directory:
+    description: Directory for the candidate repository
+    default: build/repository
+  cache-directory:
+    description: Optional package cache destination for subsequent consumer tests
+    required: false
+outputs:
+  archive:
+    description: Verified NAR path
+    value: ${{ steps.package.outputs.archive }}
+  version:
+    description: Version from NAR metadata
+    value: ${{ steps.package.outputs.version }}
+runs:
+  using: composite
+  steps:
+    - id: package
+      shell: pwsh
+      env:
+        MODULE_PATH: ${{ inputs.module-path }}
+        PACKAGE_NORM: ${{ inputs.norm-executable }}
+        OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
+        CACHE_DIRECTORY: ${{ inputs.cache-directory }}
+        ACTION_DIRECTORY: ${{ github.action_path }}
+      run: |
+        $ErrorActionPreference = 'Stop'
+        $root = (Get-Location).Path
+        $module = [IO.Path]::GetFullPath((Join-Path $root $env:MODULE_PATH))
+        if (!$module.StartsWith($root + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Module is outside repository' }
+        if (!(Test-Path -LiteralPath (Join-Path $module 'module.norm'))) { throw 'Module descriptor is missing' }
+        $license = Join-Path $root 'LICENSE'
+        New-Item -ItemType Directory -Force (Join-Path $module 'resources') | Out-Null
+        Copy-Item -LiteralPath $license -Destination (Join-Path $module 'resources/LICENSE')
+        & $env:PACKAGE_NORM package $module --output $env:OUTPUT_DIRECTORY
+        if ($LASTEXITCODE -ne 0) { throw 'Module packaging failed' }
+        git diff --exit-code -- '*.norm'
+        if ($LASTEXITCODE -ne 0) { throw 'Packaging changed tracked source or resolution pins' }
+        $archives = @(Get-ChildItem -LiteralPath $env:OUTPUT_DIRECTORY -Recurse -Filter '*.nar')
+        if ($archives.Count -ne 1) { throw 'Output must contain exactly one NAR' }
+        $artifact = & (Join-Path $env:ACTION_DIRECTORY 'verify-artifact.ps1') -Archive $archives[0].FullName -License $license
+        "archive=$($artifact.archive)" >> $env:GITHUB_OUTPUT
+        "version=$($artifact.version)" >> $env:GITHUB_OUTPUT
+        if ($env:CACHE_DIRECTORY) {
+          New-Item -ItemType Directory -Force $env:CACHE_DIRECTORY | Out-Null
+          Copy-Item -Path (Join-Path $env:OUTPUT_DIRECTORY '*') -Destination $env:CACHE_DIRECTORY -Recurse -Force
+        }
