@@ -62,4 +62,6 @@ runs:
       working-directory: .tmp/norm-toolchain
       run: |
         bash ./gradlew :compiler:installRuntimeDist --no-daemon --console=plain
-        echo "$PWD/build/compiler/norm-runtime/bin" >> "$GITHUB_PATH"
+        bin="$PWD/build/compiler/norm-runtime/bin"
+        if [[ "$RUNNER_OS" == "Windows" ]]; then bin="$(cygpath -w "$bin")"; fi
+        echo "$bin" >> "$GITHUB_PATH"
