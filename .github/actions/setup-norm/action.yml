@@ -1,0 +1,65 @@
+name: Set up Norm
+description: Install a verified release or build an immutable compiler source revision
+inputs:
+  version:
+    description: Published Norm version
+    required: false
+  source-ref:
+    description: Full commit SHA in normlanguage/Norm
+    required: false
+runs:
+  using: composite
+  steps:
+    - name: Validate toolchain selection
+      shell: bash
+      env:
+        NORM_VERSION: ${{ inputs.version }}
+        NORM_SOURCE: ${{ inputs.source-ref }}
+      run: |
+        if [[ -n "$NORM_VERSION" && -z "$NORM_SOURCE" ]]; then
+          exit 0
+        fi
+        [[ -z "$NORM_VERSION" && "$NORM_SOURCE" =~ ^[0-9a-f]{40}$ ]]
+    - name: Install release
+      if: inputs.version != ''
+      shell: bash
+      env:
+        NORM_VERSION: ${{ inputs.version }}
+      run: |
+        case "$RUNNER_OS" in
+          Linux) archive="norm-v$NORM_VERSION-linux-x64.tar.gz" ;;
+          Windows) archive="norm.exe" ;;
+          *) echo "Unsupported package runner: $RUNNER_OS" >&2; exit 1 ;;
+        esac
+        base="https://github.com/normlanguage/Norm/releases/download/v$NORM_VERSION"
+        curl -fL "$base/$archive" -o "$RUNNER_TEMP/$archive"
+        curl -fL "$base/SHA256SUMS" -o "$RUNNER_TEMP/SHA256SUMS"
+        grep "  $archive$" "$RUNNER_TEMP/SHA256SUMS" | (cd "$RUNNER_TEMP" && sha256sum -c -)
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          mkdir -p "$RUNNER_TEMP/norm/bin"
+          mv "$RUNNER_TEMP/$archive" "$RUNNER_TEMP/norm/bin/norm.exe"
+        else
+          tar -C "$RUNNER_TEMP" -xzf "$RUNNER_TEMP/$archive"
+        fi
+        echo "$RUNNER_TEMP/norm/bin" >> "$GITHUB_PATH"
+    - uses: actions/checkout@v7
+      if: inputs.source-ref != ''
+      with:
+        repository: normlanguage/Norm
+        ref: ${{ inputs.source-ref }}
+        path: .tmp/norm-toolchain
+        persist-credentials: false
+    - uses: actions/setup-java@v5
+      if: inputs.source-ref != ''
+      with:
+        distribution: oracle
+        java-version: 25.0.2
+    - uses: gradle/actions/setup-gradle@v6
+      if: inputs.source-ref != ''
+    - name: Build source toolchain
+      if: inputs.source-ref != ''
+      shell: bash
+      working-directory: .tmp/norm-toolchain
+      run: |
+        bash ./gradlew :compiler:installRuntimeDist --no-daemon --console=plain
+        echo "$PWD/build/compiler/norm-runtime/bin" >> "$GITHUB_PATH"
