@@ -5,7 +5,11 @@ on:
     inputs:
       norm-version:
         description: Norm toolchain version
-        required: true
+        required: false
+        type: string
+      norm-source-ref:
+        description: Full compiler commit SHA, mutually exclusive with norm-version
+        required: false
         type: string
       runner:
         description: Runner for the module's pinned Java platform
@@ -25,32 +29,15 @@ jobs:
       - uses: actions/checkout@v7
         with:
           lfs: true
-      - name: Install Norm
-        env:
-          NORM_VERSION: ${{ inputs.norm-version }}
-        shell: bash
-        run: |
-          case "$RUNNER_OS" in
-            Linux) archive="norm-v$NORM_VERSION-linux-x64.tar.gz" ;;
-            Windows) archive="norm.exe" ;;
-            *) echo "Unsupported package runner: $RUNNER_OS" >&2; exit 1 ;;
-          esac
-          base="https://github.com/normlanguage/Norm/releases/download/v$NORM_VERSION"
-          curl -fL "$base/$archive" -o "$RUNNER_TEMP/$archive"
-          curl -fL "$base/SHA256SUMS" -o "$RUNNER_TEMP/SHA256SUMS"
-          grep "  $archive$" "$RUNNER_TEMP/SHA256SUMS" | (cd "$RUNNER_TEMP" && sha256sum -c -)
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            mkdir -p "$RUNNER_TEMP/norm/bin"
-            mv "$RUNNER_TEMP/$archive" "$RUNNER_TEMP/norm/bin/norm.exe"
-          else
-            tar -C "$RUNNER_TEMP" -xzf "$RUNNER_TEMP/$archive"
-          fi
-          echo "$RUNNER_TEMP/norm/bin" >> "$GITHUB_PATH"
+      - uses: normlanguage/registry/.github/actions/setup-norm@c6a21b89db93b3ce3858f0d451f05d786b3ee8ea
+        with:
+          version: ${{ inputs.norm-version }}
+          source-ref: ${{ inputs.norm-source-ref }}
       - name: Locate Module
         id: module
         shell: bash
         run: |
-          mapfile -d '' modules < <(find . -type f -name module.norm -not -path './.git/*' -not -path './examples/*' -not -path './sample/*' -not -path './samples/*' -print0)
+          mapfile -d '' modules < <(find . -type f -name module.norm -not -path './.git/*' -not -path './.tmp/*' -not -path './.norm/*' -not -path './examples/*' -not -path './sample/*' -not -path './samples/*' -print0)
           [[ "${#modules[@]}" == 1 ]]
           echo "path=${modules[0]}" >> "$GITHUB_OUTPUT"
       - name: Package
@@ -72,7 +59,7 @@ jobs:
         run: |
           while IFS= read -r -d '' entry; do
             timeout 300 norm "$entry"
-          done < <(find . -type f -name Main.norm -not -path './.git/*' -not -path './build/*' -not -path './samples/*' -print0)
+          done < <(find . -type f -name Main.norm -not -path './.git/*' -not -path './.tmp/*' -not -path './.norm/*' -not -path './build/*' -not -path './samples/*' -print0)
       - name: Select release artifact
         id: artifact
         shell: bash
