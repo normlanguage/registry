@@ -7,6 +7,10 @@ inputs:
   source-ref:
     description: Full commit SHA in normlanguage/Norm
     required: false
+outputs:
+  executable:
+    description: Absolute path to the installed Norm executable
+    value: ${{ steps.executable.outputs.path }}
 runs:
   using: composite
   steps:
@@ -65,3 +69,13 @@ runs:
         bin="$PWD/build/compiler/norm-runtime/bin"
         if [[ "$RUNNER_OS" == "Windows" ]]; then bin="$(cygpath -w "$bin")"; fi
         echo "$bin" >> "$GITHUB_PATH"
+    - name: Export executable
+      id: executable
+      shell: pwsh
+      env:
+        SOURCE_REF: ${{ inputs.source-ref }}
+      run: |
+        $name = if ($IsWindows) { if ($env:SOURCE_REF) { 'norm.bat' } else { 'norm.exe' } } else { 'norm' }
+        $executable = (Get-Command $name -CommandType Application -ErrorAction Stop).Source
+        "NORM_EXECUTABLE=$executable" >> $env:GITHUB_ENV
+        "path=$executable" >> $env:GITHUB_OUTPUT
