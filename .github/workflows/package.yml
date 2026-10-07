@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           lfs: true
-      - uses: normlanguage/registry/.github/actions/setup-norm@c6a21b89db93b3ce3858f0d451f05d786b3ee8ea
+      - uses: normlanguage/registry/.github/actions/setup-norm@d229852448570c786a3f86e62c7db36769ed9a18
         with:
           version: ${{ inputs.norm-version }}
           source-ref: ${{ inputs.norm-source-ref }}
