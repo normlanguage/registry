@@ -282,14 +282,14 @@
       "repository": "ui"
     },
     {
-      "name": "ui.fx",
+      "name": "ui.desktop",
       "owner": "normlanguage",
-      "repository": "ui.fx"
+      "repository": "ui.desktop"
     },
     {
-      "name": "ui.fx.kit",
+      "name": "ui.desktop.kit",
       "owner": "normlanguage",
-      "repository": "ui.fx.kit"
+      "repository": "ui.desktop.kit"
     },
     {
       "name": "ui.theme",
