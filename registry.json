@@ -2,6 +2,11 @@
   "formatVersion": 1,
   "packages": [
     {
+      "name": "agent",
+      "owner": "normlanguage",
+      "repository": "agent"
+    },
+    {
       "name": "caffeine.cache",
       "owner": "normlanguage",
       "repository": "caffeine-cache"
