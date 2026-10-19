@@ -34,3 +34,6 @@ jobs:
             [.packages[].name] == ([.packages[].name] | sort)
             and (([.packages[].name] | unique | length) == (.packages | length))
           ' registry.json
+      - name: Validate Registry Skill
+        shell: pwsh
+        run: ./tests/skill-contract.ps1
