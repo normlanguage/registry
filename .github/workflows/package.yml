@@ -64,7 +64,9 @@ jobs:
           while IFS= read -r -d '' entry; do
             module_dir="$(dirname "$entry")"
             if [[ -f "$module_dir/module.norm" ]]; then
-              norm package "$module_dir/module.norm" --output "build/examples/$(basename "$module_dir")"
+              output="build/examples/$(basename "$module_dir")"
+              norm package "$module_dir/module.norm" --output "$output"
+              cp -R "$output/." "$HOME/.norm/cache/packages/github/"
             fi
           done < <(find . -type f -name Main.norm -not -path './.git/*' -not -path './.tmp/*' -not -path './.norm/*' -not -path './build/*' -not -path './samples/*' -print0)
       - name: Verify examples
