@@ -247,6 +247,11 @@
       "repository": "okhttp-client"
     },
     {
+      "name": "okio",
+      "owner": "normlanguage",
+      "repository": "okio"
+    },
+    {
       "name": "openai",
       "owner": "normlanguage",
       "repository": "openai"
