@@ -39,7 +39,9 @@ runs:
         if ($module -ne $root -and !$module.StartsWith($root + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Module is outside repository' }
         if (!(Test-Path -LiteralPath (Join-Path $module 'module.norm'))) { throw 'Module descriptor is missing' }
         $license = Join-Path $root 'LICENSE'
-        $moduleName = ($env:MODULE_REPOSITORY -split '/')[-1]
+        $descriptor = Get-Content -LiteralPath (Join-Path $module 'module.norm') -Raw
+        $moduleName = [regex]::Match($descriptor, 'name:\s*"([a-z][a-z0-9]*(?:\.[a-z][a-z0-9]*)*)"').Groups[1].Value
+        if (!$moduleName) { throw 'Module descriptor name is missing' }
         $resource = Join-Path $module ("resources/META-INF/licenses/$moduleName")
         New-Item -ItemType Directory -Force $resource | Out-Null
         Copy-Item -LiteralPath $license -Destination (Join-Path $resource 'LICENSE')
@@ -50,7 +52,7 @@ runs:
         $archives = @(Get-ChildItem -LiteralPath $env:OUTPUT_DIRECTORY -Recurse -Filter '*.nar')
         if ($archives.Count -ne 1) { throw 'Output must contain exactly one NAR' }
         $artifact = & (Join-Path $env:ACTION_DIRECTORY 'verify-artifact.ps1') -Archive $archives[0].FullName -License $license
-        if ($artifact.name -cne $moduleName) { throw 'Repository name must equal module name' }
+        if ($artifact.name -cne $moduleName) { throw 'Published module name differs from descriptor' }
         "archive=$($artifact.archive)" >> $env:GITHUB_OUTPUT
         "version=$($artifact.version)" >> $env:GITHUB_OUTPUT
         if ($env:CACHE_DIRECTORY) {
