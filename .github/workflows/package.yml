@@ -58,6 +58,15 @@ jobs:
           if [[ -d "$module_dir/tests" ]]; then
             timeout 300 norm test "$module_dir"
           fi
+      - name: Resolve example dependencies
+        shell: bash
+        run: |
+          while IFS= read -r -d '' entry; do
+            module_dir="$(dirname "$entry")"
+            if [[ -f "$module_dir/module.norm" ]]; then
+              norm package "$module_dir/module.norm" --output "build/examples/$(basename "$module_dir")"
+            fi
+          done < <(find . -type f -name Main.norm -not -path './.git/*' -not -path './.tmp/*' -not -path './.norm/*' -not -path './build/*' -not -path './samples/*' -print0)
       - name: Verify examples
         shell: bash
         run: |
@@ -68,4 +77,5 @@ jobs:
         with:
           archive: ${{ steps.artifact.outputs.archive }}
           version: ${{ steps.artifact.outputs.version }}
+
 
