@@ -242,6 +242,11 @@
       "repository": "micronaut-websocket"
     },
     {
+      "name": "netty.buffer",
+      "owner": "normlanguage",
+      "repository": "netty-buffer"
+    },
+    {
       "name": "okhttp.client",
       "owner": "normlanguage",
       "repository": "okhttp-client"
